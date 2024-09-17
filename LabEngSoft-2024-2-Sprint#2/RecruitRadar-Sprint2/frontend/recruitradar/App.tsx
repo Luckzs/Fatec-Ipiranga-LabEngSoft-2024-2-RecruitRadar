@@ -11,7 +11,7 @@ import  { AuthProvider } from './src/contexts/auth';
 import { NavigationContainer } from '@react-navigation/native';
 
 const linking = {
-  prefixes: ['exp://192.168.100.83:8081/--/recruitradar'],
+  prefixes: ['exp://'],
   config: {
     screens: {
       ResetPassword:{
