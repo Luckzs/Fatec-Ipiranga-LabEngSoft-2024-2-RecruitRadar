@@ -1,25 +1,23 @@
-import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Home } from '../screens/home';
 import { useAuth } from '../contexts/auth';
-import {
-  CandidateExperience
-} from '../screens/CreateCandidateScreens/candidateexperience';
+import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { CreateCandidate } from '../screens/CreateCandidateScreens/candidate';
+import { Address } from '../screens/CreateCandidateScreens/candidateaddress';
+import { CandidateExperience } from '../screens/CreateCandidateScreens/candidateexperience';
 import { CandidateStudy } from '../screens/CreateCandidateScreens/candidatestudy';
 import { CandidateSkillLanguage } from '../screens/CreateCandidateScreens/candidateskilllanguage';
 import { CandidateObjectives } from '../screens/CreateCandidateScreens/candidateobjective';
+import Jobs from '../screens/jobs';
 import { ProfileScreen } from '../screens/profilescreen';
 import { EditCandidateScreen } from '../screens/edits/editcandidate';
-import { EditCandidateObjectives } from '../screens/edits/editobjective';
+import { EditCandidateObjectives } from '../screens/edits/editObjective';
 import { EditCandidateStudy } from '../screens/edits/editstudy';
 import { EditCandidateExperience } from '../screens/edits/editexperience';
 import { EditCandidateSkill } from '../screens/edits/editskill';
 import { EditCandidateLanguage } from '../screens/edits/editlanguage';
 import { Settings } from '../screens/edits/deleteuser';
-import { CreateCandidate } from '../screens/CreateCandidateScreens/candidate';
-import { Address } from '../screens/CreateCandidateScreens/candidateaddress';
-import Jobs from '../screens/jobs';
+import { Home } from '../screens/home';
 
 
 export type CreateCandidate = {
