@@ -9,9 +9,10 @@ import { Routes } from './src/routes';
 import React from 'react';
 import  { AuthProvider } from './src/contexts/auth';
 import { NavigationContainer } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
 
 const linking = {
-  prefixes: ['exp://'],
+  prefixes: [Linking.createURL('/recruitradar')],
   config: {
     screens: {
       ResetPassword:{
