@@ -33,7 +33,7 @@ class ForgotPasswordService {
         userAlreadyExists.passwordResetToken = newtemptoken;
         userAlreadyExists.passwordResetExpires = new Date(Date.now() + 3600000);
         const linkWeb = `http://localhost:8081/reset_password/${newtemptoken}`;
-        const linkMobile = `exp://localhost:8081/--/recruitradar/reset_password/${newtemptoken}`;
+        const linkMobile = `exp://192.168.100.83:8081/--/recruitradar/reset_password/${newtemptoken}`;
         
 
         return await usersRepositories.update(userAlreadyExists.user_id, userAlreadyExists)
