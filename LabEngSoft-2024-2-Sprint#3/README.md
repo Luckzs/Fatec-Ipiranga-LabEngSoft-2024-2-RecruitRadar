@@ -1,5 +1,6 @@
 Versão do Aplicativo para SPRINT 3
 
+Sobre o codigo fonte:
 Tratando principalmente do caso de uso : Visualizar detalhes da Vaga
 
 Sendo uma Sprint preparatória para os futuros passos do aplicativo, além de ajustes no frontend foram realizados ajustes no webscraping para melhorar a qualidade dos dados.
@@ -11,3 +12,10 @@ Sobre o docker temos nesta versão arquivos compose.yml e dockerfiles para caso 
 lembrando que para rodar a container frontend é preciso colocar o ip local no arquivo compose.yml.
 
 obs: nessa sprint estamos disponibilizamos os arquivos .env (tanto pra o docker quanto o backend), para facilitar configurações, mas não é a intenção final disponibilizar estes arquivos
+
+
+Sobre demais artefatos:
+
+Video foi comprimido para conseguir subir no github, mas segue um link alternativo caso preciso: https://drive.google.com/file/d/1fezC7FTgvqtTP4onlG3WbX1KJOx84MM2/view?usp=sharing
+
+Esta presente na pasta também, o roteiro de testes destinado a este caso de uso e o arquivo pdf do seminário.
