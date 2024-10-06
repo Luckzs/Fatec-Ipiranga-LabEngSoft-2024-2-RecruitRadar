@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    env_file:
+      - ./backend/src/config/config.env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - type: volume
+        source: db-data
+        target: /var/lib/postgresql/data
+    networks:
+      - dev
+      
+  backend:
+    container_name: backend_node
+    command: yarn dev2
+    build:
+      args:
+        - NODE_ENV=development
+      context: ./backend
+      target: development
+    restart: always
+    environment:
+      - WATCHPACK_POLLING=true
+    env_file:
+      - ./backend/src/config/config.env
+    #environment:
+    #  - SECRET=${SECRET}
+    #  - TYPEORM_CONNECTION=${TYPEORM_CONNECTION}
+    #  - TYPEORM_HOST=${TYPEORM_HOST}
+    #  - TYPEORM_PORT=${TYPEORM_PORT}
+    #  - TYPEORM_USERNAME=${TYPEORM_USERNAME}
+    #  - TYPEORM_PASSWORD=${TYPEORM_PASSWORD}
+    # - TYPEORM_DATABASE=${TYPEORM_DATABASE}
+    #  - TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}
+    #  - TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}
+    #  - TYPEORM_ENTITIES=${TYPEORM_ENTITIES}
+    # - TYPEORM_ENTITIES_DIR=${TYPEORM_ENTITIES_DIR}
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/code/backend # Monta o diretório atual dentro do contêiner
+      - /code/backend/node_modules # Impede que o node_modules da máquina local sobrescreva o do container
+    networks:
+      - dev
+    depends_on:
+      - postgres
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    env_file:
+      - ./backend/src/config/config.env
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_MAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW}
+    ports:
+      - "5050:80"
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - dev
+
+  frontend:
+    container_name: frontend_reactnative
+    build:
+      context: ./frontend
+      target: development
+    env_file:
+      - ./backend/src/config/config.env
+    environment:
+      - WATCHPACK_POLLING=true
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - REACT_NATIVE_PACKAGER_HOSTNAME= ##.##.##.## # SEU IP
+    ports:
+      - 8081:8081
+      - 19000:19000
+      - 19001:19001
+      - 19002:19002
+
+    volumes:
+      - ./frontend:/code/frontend
+    networks:
+      - dev
+    depends_on:
+      - backend
+
+networks:
+  dev:
+
+volumes:
+  db-data:
