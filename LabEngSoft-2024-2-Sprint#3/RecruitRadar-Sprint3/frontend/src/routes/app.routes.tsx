@@ -69,7 +69,7 @@ const AppRoutes = () => {
   }
 
   return (
-    /*firstTime ?
+    firstTime ?
       <CandidateStack.Navigator screenOptions={{ headerShown: false }} >
         <CandidateStack.Screen name='CreateCandidate' component={CreateCandidate} />
         <CandidateStack.Screen name='Address' component={Address} />
@@ -80,7 +80,7 @@ const AppRoutes = () => {
         <CandidateStack.Screen name='CandidateObjectives' component={CandidateObjectives} />
 
       </CandidateStack.Navigator>
-      :*/
+      :
       <Stack.Navigator screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Home" component={Jobs} />
         <Stack.Screen name='CandidateExperience' component={CandidateExperience} />
