@@ -1,0 +1,11 @@
+Versão do Aplicativo para SPRINT 4
+
+Tratando principalmente do caso de uso : Recomendar Vagas e Dar Match com a vaga
+
+Sendo uma Sprint com casos de uso principais ao negócio.
+
+Além disso se deu o inicio da implmentação da estrutura de homologação, ja portando a imagem para o azure repositorys e a criação do banco de dados na nuvem junto com o web app da azure também. Sendo uma preparação para a sprint 5.
+
+Sobre o docker local temos nesta versão arquivos compose.yml e dockerfiles para caso seja necessário rodar a aplicação, sendo que esta rodandoo apenas a imagem do backend, pois agora a organização do banco de dados se encontra na nuvem.
+
+obs: nessa sprint estamos disponibilizamos os arquivos .env, para facilitar configurações, mas não é a intenção final disponibilizar estes arquivos
