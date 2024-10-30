@@ -27,11 +27,11 @@ services:
     #  yarn migration:run &&
     #  yarn dev2
     #  "
-    build:
-      args:
-        - NODE_ENV=development
-      context: ./backend
-      target: development
+    # build:
+    #   args:
+    #     - NODE_ENV=development
+    #   context: ./backend
+    #   target: development
     restart: always
     env_file:
       - ./.env

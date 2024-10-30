@@ -1,5 +1,6 @@
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import api from "./api"
+import { Alert } from "react-native";
 interface Response {
     token: string;
     user: {
@@ -56,6 +57,7 @@ export function signUp(name: string, email: string, password: string): Promise<R
             } else {
                 // Trate outros tipos de erros
                 reject(new Error('Erro ao criar a conta. Email ou senha inválidos.'+error));
+                Alert.alert('Erro ao criar a conta. Email ou senha inválidos.'+error.message);
             }
         }
     });

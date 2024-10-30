@@ -24,8 +24,8 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   content: {
-    flex: 1,
     marginTop: 0,
+    flex: 1,
     width: '100%',
     paddingHorizontal: 35,
   },

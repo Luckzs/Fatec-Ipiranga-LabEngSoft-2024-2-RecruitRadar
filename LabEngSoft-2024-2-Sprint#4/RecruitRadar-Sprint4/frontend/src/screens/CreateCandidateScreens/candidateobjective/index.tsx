@@ -1,11 +1,18 @@
-import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Alert,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { styles } from "./styles";
 import logoSmall from "../../../assets/LogoSmall.png";
 import { Button } from "../../../components/Button";
 import { TextInput } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "@react-native-community/slider";
 import DropDownPicker from "react-native-dropdown-picker";
 import useAsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,13 +27,14 @@ interface Objectives {
   work_model: string;
   salary_expectation: string;
   distance_radius: number;
+  professional_area: string;
 }
 
 export function CandidateObjectives() {
   const navigation = useNavigation<any>();
   const [email, setEmail] = React.useState("");
 
-  const { firstTime, loading,updateFirstTime } = useAuth();
+  const { firstTime, loading, updateFirstTime } = useAuth();
 
   const handleNavigate = async () => {
     console.log(positions); //objectives
@@ -34,6 +42,7 @@ export function CandidateObjectives() {
     console.log(salary); //objectives
     console.log(distance); //candidates
     console.log(workModel.toString()); //objectives
+    console.log(searchText); //objectives
 
     const email = await useAsyncStorage
       .getItem("@RRAuth:user")
@@ -50,6 +59,7 @@ export function CandidateObjectives() {
       work_model: workModel.toString(),
       salary_expectation: salary,
       distance_radius: distance,
+      professional_area: searchText,
     };
 
     console.log(objectives);
@@ -72,7 +82,6 @@ export function CandidateObjectives() {
         Alert.alert("Erro", "Erro ao cadastrar objetivos." + error);
         console.log(error);
       });
-      
   };
 
   const [isEditingSalary, setIsEditingSalary] = React.useState(false);
@@ -121,6 +130,55 @@ export function CandidateObjectives() {
     setWorkModel(updatedWorkModel);
   };
 
+  const [professionalAreas, setProfessionalAreas] = React.useState<string[]>(
+    []
+  );
+  // Estado para armazenar a área profissional selecionada
+  const [searchText, setSearchText] = React.useState("");
+  const [filteredAreas, setFilteredAreas] = React.useState<string[]>([]);
+  const [selectedArea, setSelectedArea] = React.useState<string | null>(null);
+  const [isDropdownVisible, setDropdownVisible] = React.useState(false);
+
+  useEffect(() => {
+    const fetchProfessionalAreas = async () => {
+      try {
+        const response = await api.get("/professional_areas");
+        setProfessionalAreas(response.data);
+        setFilteredAreas(response.data);
+      } catch (error) {
+        Alert.alert(
+          "Erro",
+          "Não foi possível carregar as áreas profissionais."
+        );
+      }
+    };
+    fetchProfessionalAreas();
+  }, []);
+
+  // Função para normalizar uma string, removendo acentos
+  const normalizeText = (text: string) => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  // Atualiza a lista de áreas filtradas conforme o usuário digita
+  const handleSearchTextChange = (text: string) => {
+    setSearchText(text);
+
+    // Filtra as áreas que contêm o texto digitado
+    const filtered = professionalAreas.filter((area) =>
+      normalizeText(area)
+        .toLowerCase()
+        .includes(normalizeText(text).toLowerCase())
+    );
+    setFilteredAreas(filtered);
+  };
+
+  // Atualiza o campo de entrada com a área selecionada
+  const handleSelectArea = (area: string) => {
+    setSearchText(area);
+    setDropdownVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <Image source={logoSmall} style={styles.imageLogo} resizeMode="stretch" />
@@ -160,6 +218,36 @@ export function CandidateObjectives() {
               </TouchableOpacity>
             </View>
           ))}
+        </View>
+
+        {/* Campo de Área Profissional */}
+        <View style={styles.section}>
+          <TextInput
+            style={styles.input2}
+            placeholder="Digite uma área profissional"
+            value={searchText}
+            onChangeText={handleSearchTextChange}
+            scrollEnabled={false}
+            multiline={true}
+            textAlignVertical="center"
+            onFocus={() => setDropdownVisible(true)}
+          />
+
+          {/* Exibe a lista de opções filtradas com rolagem */}
+          {isDropdownVisible && searchText !== "" && (
+            <FlatList
+              data={filteredAreas}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => handleSelectArea(item)}>
+                  <Text style={styles.dropdownItem}>{item}</Text>
+                </TouchableOpacity>
+              )}
+              style={styles.dropdownList} // Estilo revisado para altura fixa
+              contentContainerStyle={{ paddingBottom: 10 }} // Adiciona espaço inferior
+              showsVerticalScrollIndicator={true}
+            />
+          )}
         </View>
 
         <View style={styles.salaryinputGroup}>
@@ -239,12 +327,11 @@ export function CandidateObjectives() {
             ))}
           </View>
         </View>
-        
       </View>
 
       <TouchableOpacity style={styles.buttonPrimary} onPress={handleNavigate}>
-          <Text style={styles.textbuttonPrimary}>Continuar</Text>
-        </TouchableOpacity>
+        <Text style={styles.textbuttonPrimary}>Continuar</Text>
+      </TouchableOpacity>
     </View>
   );
 }

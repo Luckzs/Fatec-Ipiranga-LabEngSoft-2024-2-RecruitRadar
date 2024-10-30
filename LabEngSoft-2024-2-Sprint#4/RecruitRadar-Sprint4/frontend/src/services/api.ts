@@ -5,7 +5,9 @@ import * as Linking from 'expo-linking';
 // Obter o IP dinâmico da aplicação Expo de forma síncrona
 const getApiBaseUrl = () => {
   const expoUrl = Linking.createURL('/');
+  console.log("Expo URL:", expoUrl);
   const ip = expoUrl.split('/')[2];  // Extrai o IP do link gerado pelo Expo
+  console.log("IP:", ip);
   return `http://${ip.replace(':8081', ':3000')}`;
 };
 

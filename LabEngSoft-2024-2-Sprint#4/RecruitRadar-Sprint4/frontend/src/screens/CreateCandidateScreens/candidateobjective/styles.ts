@@ -53,14 +53,27 @@ addButton: {
   height: 30,
   width: 30,
   borderRadius: 20,
-  marginTop: 25,
+  marginTop: 0,
 },
 addButtonText: {
   color: 'white',
+  
   fontSize: 24,
 },
   input: {
-    flex: 1,
+    marginRight: 10,
+    color : theme.colors.primary,
+    height: 50,
+    width: '95%',
+    borderColor: 'gray',
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  input2: {
     marginRight: 10,
     color : theme.colors.primary,
     height: 50,
@@ -70,7 +83,6 @@ addButtonText: {
     borderBottomColor: 'gray',
     borderWidth: 1,
     borderRadius: 8,
-    marginTop: 25,
     fontSize: 15,
     textAlign: 'center',
   },
@@ -145,8 +157,22 @@ header: {
   paddingVertical: 10,
 },
 section: {
+},
+
+dropdownList: {
+  maxHeight: 200,                // Define uma altura fixa para a lista
+  backgroundColor: "white",
+  borderWidth: 1,
+  borderColor: "#ccc",
   marginTop: 5,
-  marginBottom: 5,
+  borderRadius: 5,
+  zIndex: 1000,
+  overflow: 'scroll',            // Para rolar o conteúdo sem cortar itens
+},
+dropdownItem: {
+  padding: 10,                // Espaçamento interno para maior clique e visualização
+  borderBottomWidth: 1,       // Linha divisória entre itens
+  borderBottomColor: "#eee",  // Cor clara para a linha divisória
 },
 
 text: {

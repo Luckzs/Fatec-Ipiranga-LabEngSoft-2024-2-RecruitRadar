@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { styles } from './styles';
 import logoSmall from "../../../assets/LogoSmall.png";
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -68,15 +68,24 @@ export function Address() {
       setPostalCode(locInfo.postal_code);
       setIsAddressValid(true); // Define o endereço como válido
     } catch (error) {
-      Alert.alert('Erro', 'CEP não encontrado. Por favor, insira um CEP válido. Detalhes:' + error);
+      Alert.alert('Erro', 'Não foi possivel realizar a pesquisa de endereço, por favor insira manualmente as informações');
       console.log(error);
-      setIsAddressValid(false); // Define o endereço como inválido
+      setIsAddressValid(true); // Define o endereço como inválido
+      setEndereco(''); // Permite edição manual
+      setCity(''); // Permite edição manual
+      setState(''); // Permite edição manual
+      setPostalCode(cep); // Define o CEP como o código postal
     }
 
   }
   const handleNavigate = async () => {
 
     console.log(parsedUser);
+    console.log(endereco);
+    console.log(city);
+    console.log(state);
+    console.log(postal_code)
+    console.log(user?.email);
 
     api.post('/candidate', {
       full_name: parsedUser.full_name,
@@ -102,6 +111,7 @@ export function Address() {
     });
   }
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Image
         source={logoSmall}
@@ -128,9 +138,9 @@ export function Address() {
             setCEP(text);
             if (text.length < 8) {
               setIsAddressValid(false);
-              setEndereco('');
               setCity('');
               setState('');
+              setEndereco('');
               setPostalCode('');
             }
           }
@@ -146,6 +156,32 @@ export function Address() {
         <TextInput style={styles.input} placeholder="Confira se o seu endereço esta correto"
           keyboardType='email-address'
           value={endereco}
+          onChangeText={setEndereco}
+          multiline={true}
+          placeholderTextColor={theme.colors.primary}
+        >
+        </TextInput>
+
+        <Text style={styles.label}>
+          Cidade {'\n'}
+        </Text>
+        <TextInput style={styles.input} placeholder="Confira se a sua cidade esta correta"
+          keyboardType='email-address'
+          value={city}
+          onChangeText={setCity}
+          multiline={true}
+          placeholderTextColor={theme.colors.primary}
+        >
+        </TextInput>
+
+        <Text style={styles.label}>
+          Estado (sigla){'\n'}
+        </Text>
+        <TextInput style={styles.input} placeholder="Confira se o seu estado esta correto"
+          keyboardType='email-address'
+          value={state}
+          onChangeText={setState}
+          maxLength={2}
           multiline={true}
           placeholderTextColor={theme.colors.primary}
         >
@@ -161,6 +197,7 @@ export function Address() {
       </View>
 
     </View>
+    </ScrollView>
 
   );
 }

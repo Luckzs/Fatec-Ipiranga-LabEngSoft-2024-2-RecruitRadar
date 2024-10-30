@@ -20,6 +20,7 @@ class CreateCandidateObjectiveController {
                     work_model: Objectives.work_model,
                     salary_expectation: Objectives.salary_expectation,
                     distance_radius: Objectives.distance_radius,
+                    professional_area: Objectives.professional_area
                 });
 
 

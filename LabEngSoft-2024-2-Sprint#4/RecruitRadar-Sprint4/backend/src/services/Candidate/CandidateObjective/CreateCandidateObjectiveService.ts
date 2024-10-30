@@ -8,6 +8,7 @@ interface ICandidateObjectiveRequest {
   work_model: string;
   salary_expectation: string;
   distance_radius: number;
+  professional_area: string;
 }
 
 class CreateCandidateObjectiveService {
@@ -19,7 +20,7 @@ class CreateCandidateObjectiveService {
       throw new Error("Invalid data");
     }
 
-    const { email, job, salary_expectation, work_model, distance_radius } = data;
+    const { email, job, salary_expectation, work_model, distance_radius,professional_area } = data;
 
     const candidateRepository = connectionSource.getRepository(Candidate);
 
@@ -52,6 +53,7 @@ class CreateCandidateObjectiveService {
       job,
       salary_expectation,
       work_model,
+      professional_area
     });
 
     await candidateObjectiveRepository.save(candidateObjective);

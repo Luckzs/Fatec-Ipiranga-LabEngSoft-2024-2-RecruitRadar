@@ -48,7 +48,6 @@ export function CreateUser() {
     
     signUp(user, email, password)
       .then(() => {
-        Alert.alert("Atenção", "Usuário criado com sucesso");
         console.log("Atenção", "Usuário criado com sucesso");
       })
       .catch((error) => {

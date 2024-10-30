@@ -86,7 +86,7 @@ export function EditCandidateObjectives() {
       job: objective.job,
       work_model: objective.work_model,
       salary_expectation: objective.salary_expectation,
-      professional_area: objective.professional_area,
+      professional_area: objective.professional_area || "",
       distance_radius: objective.distance_radius,
     }))
   );
