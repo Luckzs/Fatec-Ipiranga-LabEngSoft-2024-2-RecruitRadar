@@ -1,0 +1,14 @@
+name: Scheduled POST Request Test
+
+on:
+  workflow_dispatch: # Permite execução manua
+  schedule:
+    - cron: "0 3 * * *" # Executa diariamente às 01h
+
+jobs:
+  send_post_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send POST request to API
+        run: |
+          curl -X POST ${{ secrets.VACANCYREQ }}

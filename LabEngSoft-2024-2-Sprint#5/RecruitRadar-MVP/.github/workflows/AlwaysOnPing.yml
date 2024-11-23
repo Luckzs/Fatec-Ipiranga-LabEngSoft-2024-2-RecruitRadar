@@ -1,0 +1,16 @@
+name: Always On Ping
+
+on:
+  workflow_dispatch: # Permite execução manua
+  schedule:
+    # Executa a cada 25 minutos
+    - cron: '*/25 * * * *'
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      # Passo 1: Enviar uma requisição para o endpoint de saúde
+      - name: Ping application
+        run: |
+          curl -X GET ${{ secrets.HEALTHREQ }} || echo "Application ping failed"

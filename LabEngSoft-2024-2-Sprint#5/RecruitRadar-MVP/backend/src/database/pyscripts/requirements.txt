@@ -1,0 +1,11 @@
+numpy
+scipy
+beautifulsoup4
+requests
+selenium
+webdriver_manager
+pandas
+unidecode
+gensim
+nltk
+scikit-learn
