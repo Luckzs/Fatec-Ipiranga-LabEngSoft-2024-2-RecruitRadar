@@ -37,6 +37,7 @@ services:
     volumes:
       - ./backend:/code/backend # Monta o diretório atual dentro do contêiner
       - /code/backend/node_modules # Impede que o node_modules da máquina local sobrescreva o do container
+      - /code/backend/src/database/pyscripts/modelos # Impede que os modelos para o algoritmo da máquina local sobrescrevam o do container
     networks:
       - dev
     
