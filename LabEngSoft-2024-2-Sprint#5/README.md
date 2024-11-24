@@ -1,5 +1,7 @@
 Versão do Aplicativo para SPRINT 5 - Entrega do MVP
 
+LINK DE DOWNLOAD DA APK: https://fatecspgov-my.sharepoint.com/:f:/g/personal/lucas_moraes35_fatec_sp_gov_br/EjyAN8EabSFFvZGjPBnUutQBxjwrRQaTIQXNcc9CsC3A2g?e=VhMoyI
+
 Sendo uma Sprint destinada a entrega do Produto Minimo Viavel do nosso Projeto RecruitRadar
 
 Nela foi disponibilizado o código fonte do projeto, o seminário destinado a essa sprint, simulando a apresentação para a banca, o plano de testes e a APK da nossa aplicação.
