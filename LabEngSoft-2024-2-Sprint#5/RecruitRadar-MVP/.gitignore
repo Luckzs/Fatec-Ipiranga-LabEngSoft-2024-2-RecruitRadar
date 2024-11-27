@@ -23,7 +23,6 @@ npm-debug.*
 *.orig.*
 web-build/
 build/
-*.env
 frontend/eas.json
 frontend/.env.production
 backend/src/database/pyscripts/modelos/glove_s50.txt

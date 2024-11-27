@@ -8,6 +8,7 @@ import {
   FlatList,
   TextInput,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { styles } from "./styles";
 import logoSmall from "../../../assets/LogoBetterSmall.png";
@@ -78,6 +79,7 @@ export function EditCandidateLanguage() {
   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddLanguage = () => {
     if (languages.length >= 5) {
@@ -147,7 +149,7 @@ export function EditCandidateLanguage() {
 
               Alert.alert("Sucesso", "Linguagem excluída com sucesso!");
             } catch (error) {
-              console.error(error);
+              //console.error(error);
               Alert.alert("Erro", "Erro ao excluir a linguagem: " + error);
             }
           },
@@ -191,13 +193,18 @@ export function EditCandidateLanguage() {
 
       console.log(languages);
 
+      setIsLoading(true);
       await api.put(`/candidate/language/${email}`, { languages });
+      setIsLoading(false);
 
       Alert.alert("Sucesso", "Informações salvas com sucesso!");
       navigation.goBack();
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);
+      //console.error(error);
       Alert.alert("Erro", "Erro ao salvar as informações: " + error);
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -223,6 +230,18 @@ export function EditCandidateLanguage() {
     </View>
   );
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <FlatList

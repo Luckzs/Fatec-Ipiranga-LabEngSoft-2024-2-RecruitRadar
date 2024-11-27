@@ -385,6 +385,7 @@ const Jobs = () => {
 
     if (locationPermissionGranted) {
       try {
+        const start = new Date();
         const response = await api.post("/jobRecommendation", {
           profileData, // Envia o objeto `profileData` completo
           location: {
@@ -397,6 +398,8 @@ const Jobs = () => {
           : [response.data];
         setVacancyData(data); // Atualiza o global
         setLocalVacancyData(data); // Atualiza o local
+        const end = new Date();
+        console.log("Tempo de requisição:", (end.getTime() - start.getTime())/1000, "s");
       } catch (error: any) {
         console.error("Erro ao buscar vagas:", error.response.data.error);
       } finally {
@@ -588,6 +591,7 @@ const Jobs = () => {
   };
 
   const reloadVacancies = async () => {
+    updateVacancyData(); // Atualiza os dados antes de sair
     vacancyData.length = 0; // Limpa o array de vagas
     setVacancyData(vacancyData); // Esvazia vacancyData antes de sair
     setLocalVacancyData([]); // Limpa o estado local

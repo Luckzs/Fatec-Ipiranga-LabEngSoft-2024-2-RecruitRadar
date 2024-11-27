@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
+import { View, Text, Image, Alert, TouchableOpacity, ActivityIndicator } from "react-native";
 import { styles } from "./styles";
 import logoSmall from "../../../assets/LogoBetterSmall.png";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -71,6 +71,7 @@ export function Address() {
   const navigation = useNavigation<any>();
   const route = useRoute();
   const { candidato } = route.params as { candidato: string };
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
 
   // Converte a string JSON de volta em um objeto
   const parsedUser: Candidato = JSON.parse(candidato);
@@ -112,8 +113,8 @@ export function Address() {
     console.log(postal_code);
     console.log(user?.email);
 
-    api
-      .post("/candidate", {
+    setIsLoading(true);
+    api.post("/candidate", {
         full_name: parsedUser.full_name,
         CPF: parsedUser.CPF,
         sex: parsedUser.sex,
@@ -127,16 +128,20 @@ export function Address() {
         user_id: user?.email,
       })
       .then((response) => {
+        setIsLoading(false);
         console.log(response);
         Alert.alert("Sucesso", "Candidato criado com sucesso");
         navigation.navigate("CandidateExperience");
         AsyncStorage.removeItem("@RRAuth:firstTime");
       })
       .catch((error) => {
+        setIsLoading(false);
         Alert.alert(
           "Erro",
           "Erro ao criar candidato: " + error.response?.data?.error
         );
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -150,6 +155,19 @@ export function Address() {
   // Update `isAddressValid` whenever address fields change
   useEffect(validateAddress, [endereco, city, state, postal_code]);
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
+  
   return (
     <ScrollView style={styles.scrollview}>
       <View style={styles.container}>

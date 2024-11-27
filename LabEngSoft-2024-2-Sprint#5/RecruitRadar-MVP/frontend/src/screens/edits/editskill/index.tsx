@@ -8,6 +8,7 @@ import {
   FlatList,
   TextInput,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import { styles } from './styles';
 import logoSmall from '../../../assets/LogoBetterSmall.png';
@@ -66,6 +67,7 @@ export function EditCandidateSkill() {
 
   const [text, setText] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddSkill = async () => {
     if (skills.length >= 5) {
@@ -121,7 +123,7 @@ export function EditCandidateSkill() {
             Alert.alert('Sucesso', 'Formação excluída com sucesso!');
 
           } catch (error) {
-            console.error(error);
+            //console.error(error);
             Alert.alert('Erro', 'Erro ao excluir a formação: ' + error);
           }
         },
@@ -160,17 +162,20 @@ export function EditCandidateSkill() {
 
       console.log(skills);
 
+      setIsLoading(true);
       await api.put(`/candidate/skill/${email}`, { skills })
-
-
+      setIsLoading(false);
 
       Alert.alert('Sucesso', 'Informações salvas com sucesso!');
       navigation.goBack();
      
 
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);
+      //console.error(error);
       Alert.alert('Erro', 'Erro ao salvar as informações: ' + error);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -191,6 +196,19 @@ export function EditCandidateSkill() {
       </TouchableOpacity>
     </View>
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

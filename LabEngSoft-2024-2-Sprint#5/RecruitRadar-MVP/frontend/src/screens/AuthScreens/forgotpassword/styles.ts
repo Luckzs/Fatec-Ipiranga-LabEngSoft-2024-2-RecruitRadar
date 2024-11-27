@@ -107,6 +107,33 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: '400',
   },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingLogo: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
+    resizeMode: "cover",
+  },
+  loadingText: {
+    color: "#0262A6",
+    fontSize: 18,
+    marginTop: 20,
+  },
+  refreshButtonContainer: {
+    borderTopColor: '#E0E0E0',
+    borderTopWidth: 1,
+    paddingTop: 80,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+    width: '100%',
+  },
   controls: {
     marginTop: 0,
     justifyContent: 'space-evenly',

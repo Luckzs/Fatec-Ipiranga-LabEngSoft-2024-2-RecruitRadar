@@ -14,6 +14,23 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     width: "100%",
   },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingLogo: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
+    resizeMode: "cover",
+  },
+  loadingText: {
+    color: "#0262A6",
+    fontSize: 18,
+    marginTop: 20,
+  },
   backButton: {
     position: "absolute",
     top: 20,

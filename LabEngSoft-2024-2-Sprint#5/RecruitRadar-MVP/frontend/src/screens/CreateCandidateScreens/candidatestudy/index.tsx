@@ -6,6 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Platform,
@@ -57,6 +58,9 @@ export function CandidateStudy() {
   const today = new Date();
   const defaultBirthDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const [startDate, setStartDate] = React.useState(new Date());
+
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
+
 
 
   const isSameDate = (date1: Date, date2: Date) => {
@@ -146,19 +150,24 @@ export function CandidateStudy() {
       return;
     }
 
-    api
-      .post("/candidate/study", { qualifications })
+    setIsLoading(true);
+    api.post("/candidate/study", { qualifications })
       .then(() => {
         setQualifications([]);
+        setIsLoading(false);
         Alert.alert("Sucesso", "Qualificações salvas com sucesso!");
         navigation.navigate("CandidateSkillLanguage");
       })
       .catch((error) => {
+        setIsLoading(false);
         Alert.alert(
           "Erro",
           "Erro ao salvar as qualificações: " + error.message
         );
-      });
+      }).finally(() => {
+        setIsLoading(false);
+      }
+      );
   };
 
   const handleSkip = () => {
@@ -169,6 +178,19 @@ export function CandidateStudy() {
       { text: 'Continuar', onPress: () => navigation.navigate('CandidateSkillLanguage') },
     ]);
   };
+
+  if(isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import {  } from 'react-native-gesture-handler';
 
@@ -110,6 +111,8 @@ export function EditCandidateObjectives() {
   const [selectedArea, setSelectedArea] = React.useState<string | null>(null);
   const [isDropdownVisible, setDropdownVisible] = React.useState(false);
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
   useEffect(() => {
     const fetchProfessionalAreas = async () => {
       try {
@@ -178,16 +181,20 @@ export function EditCandidateObjectives() {
 
     console.log(objectives);
 
-    api
-      .put("candidate/objective", { objectives })
+    setIsLoading(true);
+    api.put("candidate/objective", { objectives })
       .then((response) => {
+        setIsLoading(false);
         Alert.alert("Sucesso", "Objetivos cadastrados com sucesso.");
         console.log(response);
         navigation.goBack();
       })
       .catch((error) => {
+        setIsLoading(false);
         Alert.alert("Erro", "Erro ao cadastrar objetivos." + error);
         console.log(error);
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -393,6 +400,19 @@ export function EditCandidateObjectives() {
       </TouchableOpacity>
     </View>
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

@@ -39,7 +39,7 @@ class ListUnappliedVacancyService {
         )`,
         "distance"
       )
-      .orderBy("distance", "ASC")
+      .orderBy("distance", "ASC")    
       .setParameters({
         email,
         candidateLatitude,
@@ -47,6 +47,7 @@ class ListUnappliedVacancyService {
         maxDistance, 
         professional_area,
       })
+      .take(1700)
       .getMany();
 
     return instanceToPlain(vacancies);

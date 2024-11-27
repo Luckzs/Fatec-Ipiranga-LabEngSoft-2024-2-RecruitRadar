@@ -11,7 +11,7 @@ import {
 import { styles } from './styles';
 import { theme } from '../../../global/styles/theme';
 
-import logoSmall from "../../../assets/LogoSmall.png";
+import logoSmall from "../../../assets/LogoBetterSmall.png";
 import { Button } from "../../../components/Button";
 import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -23,27 +23,48 @@ import api from '../../../services/api';
 export function ForgotPassword() {
   const navigation = useNavigation<any>();
   const [email, setEmail] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
 
   async function handleForgetPassword() {
 
+    console.log('Email:', email);
     if (email === '') {
       Alert.alert('Atenção', 'Preencha todos os campos');
       console.log('Preencha todos os campos');
       return;
     }
 
+    setIsLoading(true);
     await api.post('/forgot_password', {
       email: email
     }).then((response) => {
       console.log('Email enviado com sucesso');
+      setIsLoading(false);
       Alert.alert('Atenção', 'Enviamos as instruções em seu e-mail para restaurar a sua senha. Verifique sua caixa de entrada.Caso não encontre, verifique o Lixo Eletrônico.');
+      setEmail('');
       return response;
     }
     ).catch((error) => {
       console.log('Erro ao enviar email:', error);
+      setIsLoading(false);
       Alert.alert('Atenção', 'Erro ao enviar email: ' + error.response.data.error);
       return error;
     }
+    ).finally(() => {
+      setIsLoading(false);
+    });
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
     );
   }
 

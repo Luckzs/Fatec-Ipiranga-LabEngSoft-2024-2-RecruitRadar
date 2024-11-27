@@ -14,6 +14,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
+  loadingLogo: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
+    resizeMode: "cover",
+  },
   signOutButton: {
     marginTop: 20,
     padding: 10,

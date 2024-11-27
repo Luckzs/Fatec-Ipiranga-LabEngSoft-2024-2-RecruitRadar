@@ -7,6 +7,7 @@ import logoSmall from "../../../assets/LogoSmall.png"; // Adapte o caminho para 
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import api from "../../../services/api"; // Ajuste o caminho conforme necessário
 import { useAuth } from "../../../contexts/auth"; // Ajuste o caminho conforme necessário
+import { useVacancy } from "../../../contexts/vacancy";
 
 interface User {
   email: string;
@@ -40,6 +41,7 @@ export function Settings() {
   const route = useRoute<SettingsRouteProp>(); // Obtendo os parâmetros da rota
   const navigation = useNavigation<any>();
   const { user, signOut } = useAuth();
+  const { vacancyData, setVacancyData } = useVacancy(); // Substitua pelo hook
 
   const profileData = route.params.profileData; // Obtendo os dados do perfil
   const user_id = profileData.User.user_id; // Obtendo o user_id do profileData
@@ -58,12 +60,14 @@ export function Settings() {
         text: "Excluir",
         onPress: async () => {
           try {
+            vacancyData.length = 0; // Limpa o array de vagas
+            setVacancyData(vacancyData); // Esvazia vacancyData antes de sair
             // Exclua o usuário através da API
             await api.delete(`/user/${user_id}`); // Ajuste a URL da API conforme necessário
             // Após a exclusão, faça logout do usuário e navegue para a tela de login ou inicial
             await signOut();
           } catch (error: any) {
-            console.error(error);
+            //console.error(error);
             Alert.alert(
               "Erro",
               "Erro ao excluir a conta. Tente novamente mais tarde."+ error.response.data.error

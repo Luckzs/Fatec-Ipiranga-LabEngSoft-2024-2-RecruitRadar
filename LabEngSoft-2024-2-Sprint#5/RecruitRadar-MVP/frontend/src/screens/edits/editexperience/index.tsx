@@ -9,6 +9,7 @@ import {
   Platform,
   FlatList,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import logoSmall from "../../../assets/LogoBetterSmall.png";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -94,6 +95,8 @@ export function EditCandidateExperience() {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [currently, setisCurrently] = React.useState(false);
+
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
 
   /*useEffect(() => {
     if (selectedExperience) {
@@ -259,7 +262,7 @@ export function EditCandidateExperience() {
 
               Alert.alert("Sucesso", "Experiência excluída com sucesso!");
             } catch (error) {
-              console.error(error);
+              //console.error(error);
               Alert.alert("Erro", "Erro ao excluir a experiência: " + error);
             }
           },
@@ -292,16 +295,20 @@ export function EditCandidateExperience() {
     console.log(experiences);
     console.log(email);
 
-    api
-      .put(`/candidate/experience/${email}`, { experiences })
+    setIsLoading  (true);
+    api.put(`/candidate/experience/${email}`, { experiences })
       .then((response) => {
+        setIsLoading(false);
         Alert.alert("Sucesso", "Experiências salvas com sucesso!");
         console.log(response);
         navigation.navigate("profileScreen");
       })
       .catch((error) => {
-        console.error(error);
+        setIsLoading(false);
+        //console.error(error);
         Alert.alert("Erro", "Erro ao salvar as experiências: " + error.message);
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -341,6 +348,19 @@ export function EditCandidateExperience() {
       </TouchableOpacity>
     </View>
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

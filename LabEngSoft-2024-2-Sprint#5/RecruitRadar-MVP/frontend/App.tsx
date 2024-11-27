@@ -11,6 +11,7 @@ import  { AuthProvider } from './src/contexts/auth';
 import { VacancyProvider } from './src/contexts/vacancy';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
+import { LogBox } from 'react-native';
 
 const linking = {
   prefixes: [Linking.createURL('/recruitradar'),'recruitradar://',],
@@ -22,6 +23,9 @@ const linking = {
     }
   }
 }
+
+LogBox.ignoreAllLogs(true);
+LogBox.ignoreLogs(['test']);
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { View, Text, Image, Alert, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, Image, Alert, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
 import { styles } from "./styles";
 import { theme } from "../../../global/styles/theme";
-import logoSmall from "../../../assets/LogoSmall.png";
+import logoSmall from "../../../assets/LogoBetterSmall.png";
 import emailConfirmado from "../../../assets/Email_Confirmado.png";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -24,7 +24,7 @@ export function ResetPassword({ route }: any) {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(true);
   const [isMatchPasswordVisible, setIsMatchPasswordVisible] = React.useState( true);
   const [isFormValid, setIsFormValid] = useState(false); // New state for button enablement
-
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
   
   
   const togglePasswordVisibility = () => {
@@ -64,12 +64,17 @@ export function ResetPassword({ route }: any) {
       return;
     }
 
+    setIsLoading(true);
     const response = await api.put(`/reset_password/${tmptoken}`, {
       password: password,
     }).catch((error) => {
       console.log("Erro ao redefinir a senha: " + error);
+      setIsLoading(false);
       Alert.alert("Atenção", "Erro ao redefinir a senha. Retorne a tela de Esqueci Minha Senha e solicite novamente.");
+    }).finally(() => {
+      setIsLoading(false);
     });
+    setIsLoading(false);
 
     console.log(response);
     
@@ -102,6 +107,19 @@ export function ResetPassword({ route }: any) {
       keyboardDidShowListener.remove();
     };
   }, []);
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView

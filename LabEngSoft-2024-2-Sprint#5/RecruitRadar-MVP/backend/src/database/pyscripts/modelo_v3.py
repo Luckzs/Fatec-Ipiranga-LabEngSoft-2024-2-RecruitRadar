@@ -30,6 +30,12 @@ model_text_mid_path = '/code/backend/src/database/pyscripts/modelos/glove_s100.t
 model_binary_mid_path = '/code/backend/src/database/pyscripts/modelos/glove_s100.bin'
 model_text_better_path = '/code/backend/src/database/pyscripts/modelos/glove_s300.txt'
 model_binnary_better_path = '/code/backend/src/database/pyscripts/modelos/glove_s300.bin'
+model_ft_text_path = '/code/backend/src/database/pyscripts/modelos/ft_skip_s50.txt'
+model_ft_binart_path = '/code/backend/src/database/pyscripts/modelos/ft_skip_s50.bin'
+model_ft100_text_path = '/code/backend/src/database/pyscripts/modelos/ft_skip_s100.txt'
+model_ft100_binart_path = '/code/backend/src/database/pyscripts/modelos/ft_skip_s100.bin'
+model_w2v_text_path = '/code/backend/src/database/pyscripts/modelos/w2v_skip_s50.txt'
+model_w2v_binary_path = '/code/backend/src/database/pyscripts/modelos/w2v_skip_s50.bin'
 
 # Função para carregar o modelo com persistência
 def carregar_modelo():
@@ -54,19 +60,11 @@ def carregar_modelo():
 word2vec_model = carregar_modelo()
 
 ###################### DEFINIÇAO DAS FUNCOES #######################
-'''def sim_local(localizacao_candidato, localizacao_vaga, dist_max):
-    try:
-        distancia = gmaps.distance_matrix(localizacao_candidato, localizacao_vaga, mode="driving")
-        if distancia['rows'][0]['elements'][0]['distance']['value'] <= dist_max:
-            return 1.0
-    except:
-        return  0.0'''
 def sim_local(localizacao_candidato, localizacao_vaga):
     if localizacao_vaga == localizacao_candidato:
         return 1.0  # Mesmo local
     else:
         return 0.0
-    
     
 def sim_salario(salario_candidato_min,  salario_vaga_max):
     if salario_vaga_max == 0:

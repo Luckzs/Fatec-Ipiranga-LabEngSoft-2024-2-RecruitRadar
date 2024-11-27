@@ -5,6 +5,7 @@ import DateTimePicker, {
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Platform,
@@ -56,6 +57,8 @@ export function CandidateExperience() {
   const today = new Date();
   const defaultBirthDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const [startDate, setStartDate] = React.useState(new Date());
+
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
 
   const onStartDateChange = (
     event: DateTimePickerEvent,
@@ -138,17 +141,21 @@ export function CandidateExperience() {
     console.log(experiences);
 
     // Envia as informações para a API
-    api
-      .post("/candidate/experience", { experiences })
+    setIsLoading(true);
+    api.post("/candidate/experience", { experiences })
       .then((response) => {
         setExperiences([]); // Limpa a lista de experiências
+        setIsLoading(false);
         Alert.alert("Sucesso", "Experiências salvas com sucesso!");
         console.log(response);
         navigation.navigate("CandidateStudy");
       })
       .catch((error) => {
-        console.error(error);
+        setIsLoading(false);
+        //console.error(error);
         Alert.alert("Erro", "Erro ao salvar experiências: " + error.message);
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -173,6 +180,20 @@ export function CandidateExperience() {
       date1.getDate() === date2.getDate()
     );
   };
+
+ 
+    if (isLoading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Image source={logoSmall} style={styles.loadingLogo} />
+            <ActivityIndicator size="large" color="#0262A6" />
+          </View>
+        </View>
+      );
+    }
 
   return (
     <ScrollView style={styles.container}>

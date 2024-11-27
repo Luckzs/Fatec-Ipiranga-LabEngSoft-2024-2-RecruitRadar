@@ -9,6 +9,7 @@ import {
   Platform,
   FlatList,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { styles } from "./styles";
 import logoSmall from "../../../assets/LogoBetterSmall.png";
@@ -99,6 +100,7 @@ export function EditCandidateStudy() {
   const [endDate, setEndDate] = React.useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = React.useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (selectedStudy) {
@@ -264,19 +266,23 @@ export function EditCandidateStudy() {
         return JSON.parse(response || "{}").email;
       });
 
-    api
-      .put(`/candidate/study/${email}`, { qualifications })
+    setIsLoading(true);
+    api.put(`/candidate/study/${email}`, { qualifications })
       .then((response) => {
+        setIsLoading(false);
         Alert.alert("Sucesso", "Qualificações salvas com sucesso!");
         console.log(response);
         navigation.navigate('profileScreen');
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error(error);
         Alert.alert(
           "Erro",
           "Erro ao salvar as qualificações: " + error.message
         );
+      }).finally(() => {
+        setIsLoading(false);
       });
     
   };
@@ -310,6 +316,18 @@ export function EditCandidateStudy() {
     </View>
   );
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <FlatList

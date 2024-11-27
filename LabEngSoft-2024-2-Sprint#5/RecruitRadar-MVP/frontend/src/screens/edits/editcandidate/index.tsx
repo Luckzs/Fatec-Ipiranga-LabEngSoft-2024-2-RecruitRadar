@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { styles } from "./styles";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -21,6 +22,7 @@ import { format } from "path";
 import api from "../../../services/api";
 import { TextInput } from "react-native-gesture-handler";
 import getLocationInfo from "../../../services/location";
+
 
 interface User {
   email: string;
@@ -148,6 +150,7 @@ export function EditCandidateScreen() {
   const [city, setCity] = React.useState(String);
   const [state, setState] = React.useState(String);
   const [postal_code, setPostalCode] = React.useState(String);
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
 
   useEffect(() => {
     if (profileData) {
@@ -172,19 +175,23 @@ export function EditCandidateScreen() {
 
     console.log(profileLocation);
 
-    api
-      .put(`/candidate`, { profileLocation })
+    setIsLoading(true);
+    api.put(`/candidate`, { profileLocation })
       .then((response) => {
+        setIsLoading(false);
         console.log(response.data);
         Alert.alert("Sucesso", "Perfil atualizado com sucesso!");
         navigation.navigate('profileScreen',[profileData]);
       })
       .catch((error) => {
-        console.error(error);
+        //console.error(error);
+        setIsLoading(false);
         Alert.alert(
           "Erro",
           "Erro ao atualizar perfil. Detalhes: " + error.response.data.error
         );
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -219,6 +226,19 @@ export function EditCandidateScreen() {
   if (!profileData) {
     return <Text>Loading...</Text>; // Exibe um texto de carregamento enquanto os dados são buscados
   }
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
+    
   return (
     <ScrollView style={styles.scrollview}>
       {/* Botão de Retorno */}

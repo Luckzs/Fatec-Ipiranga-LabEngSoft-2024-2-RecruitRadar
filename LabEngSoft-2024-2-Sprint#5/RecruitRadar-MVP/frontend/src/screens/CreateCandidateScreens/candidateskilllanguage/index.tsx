@@ -4,7 +4,8 @@ import {
   Image,
   Alert,
   ScrollView, 
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { styles } from './styles';
 import logoSmall from "../../../assets/LogoBetterSmall.png";
@@ -41,6 +42,7 @@ export function CandidateSkillLanguage() {
   const [text, setText] = React.useState('');
   const [isSkillListVisible, setIsSkillListVisible] = React.useState(true);
   const [isLanguageListVisible, setIsLanguageListVisible] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
 
   const navigation = useNavigation<any>();
 
@@ -140,16 +142,22 @@ export function CandidateSkillLanguage() {
     }
 
     try {
+      setIsLoading(true);
       await Promise.all([
         api.post('/candidate/language', { Languages }),
         api.post('/candidate/skill', { Skills }),
       ]);
+      setIsLoading(false);
       Alert.alert('Sucesso', 'Informações salvas com sucesso!');
       navigation.navigate('CandidateObjectives');
     } catch (error) {
-
+      setIsLoading(false);
       Alert.alert('Erro', 'Erro ao salvar as informações: ' + (error as Error).message);
+    } finally {
+      setIsLoading(false);
     }
+    
+
   };
   const isSaveButtonVisible = Skills.length > 0 && Languages.length > 0;
 
@@ -161,6 +169,21 @@ export function CandidateSkillLanguage() {
       { text: 'Continuar', onPress: () => navigation.navigate('CandidateObjectives') },
     ]);
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
+    
+
   return (
     <ScrollView style={styles.container}>
 

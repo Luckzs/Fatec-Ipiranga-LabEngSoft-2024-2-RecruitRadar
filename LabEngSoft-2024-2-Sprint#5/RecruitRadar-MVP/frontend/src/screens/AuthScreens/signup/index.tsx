@@ -31,6 +31,7 @@ export function CreateUser() {
   const [isMatchPasswordVisible, setIsMatchPasswordVisible] = React.useState( true);
   const [isFormValid, setIsFormValid] = useState(false); // New state for button enablement
   const [isPasswordStrong, setIsPasswordStrong] = useState(false); // New state for password strength
+  const [isLoading, setIsLoading] = React.useState(false); // Ações específicas como login
   const { signUp } = useAuth();
 
   const navigation = useNavigation<any>();
@@ -60,13 +61,18 @@ export function CreateUser() {
       return;
     }
 
+    setIsLoading(true);
     signUp(user, email, password)
       .then(() => {
+        setIsLoading(false);
         console.log("Atenção", "Usuário criado com sucesso");
       })
       .catch((error) => {
+        setIsLoading(false);
         Alert.alert("Atenção", error.message);
         console.log("Atenção", error.message);
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -95,6 +101,18 @@ export function CreateUser() {
     setIsPasswordStrong(checkPasswordStrength(password));
   }, [password]);
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
   return (
     <ScrollView style={styles.scrollview}>
       <View style={styles.header}>

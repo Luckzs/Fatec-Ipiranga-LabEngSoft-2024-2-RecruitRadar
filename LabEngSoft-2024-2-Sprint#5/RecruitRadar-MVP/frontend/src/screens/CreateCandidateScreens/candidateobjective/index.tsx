@@ -4,6 +4,7 @@ import {
   Image,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
   
 } from "react-native";
 import { styles } from "./styles";
@@ -33,6 +34,7 @@ interface Objectives {
 export function CandidateObjectives() {
   const navigation = useNavigation<any>();
   const [email, setEmail] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const { firstTime, loading, updateFirstTime } = useAuth();
 
@@ -64,9 +66,10 @@ export function CandidateObjectives() {
 
     console.log(objectives);
 
-    api
-      .post("candidate/objective", { objectives })
+    setIsLoading(true);
+    api.post("candidate/objective", { objectives })
       .then((response) => {
+        setIsLoading(false);
         // Atualize o estado de `firstTime` para false após o cadastro
         updateFirstTime();
 
@@ -76,8 +79,11 @@ export function CandidateObjectives() {
         );
       })
       .catch((error) => {
+        setIsLoading(false);
         Alert.alert("Erro", "Erro ao cadastrar objetivos." + error);
         console.log(error);
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -176,6 +182,18 @@ export function CandidateObjectives() {
     setDropdownVisible(false);
   };
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
+        </View>
+      </View>
+    );
+  }
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
       <View style={styles.header}>

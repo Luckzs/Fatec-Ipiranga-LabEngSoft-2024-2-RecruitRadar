@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import api from "../../services/api";
 import useAsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import logoSmall from "../../assets/LogoBetterSmall.png";
 
 interface VacancyData {
   vacancy_id: string;
@@ -126,15 +127,18 @@ const CandidaturaCard: React.FC<CandidaturaCardProps> = ({
 
 const Applications = () => {
   const [vacancyData, setVacancyData] = useState<VacancyData[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchAppliedVacancyData = async () => {
     try {
+      setLoading(true);
       const email = await useAsyncStorage
         .getItem("@RRAuth:user")
         .then((response) => {
           return JSON.parse(response || "{}").email;
         });
       const response = await api.get(`/application/${email}`);
+      setLoading(false);
 
       const vacancyArray = Array.isArray(response.data)
         ? response.data
@@ -142,7 +146,10 @@ const Applications = () => {
       setVacancyData(vacancyArray);
       //console.log("Matchs",  JSON.stringify(vacancyArray, null, 2));
     } catch (error: any) {
-      console.error("Erro ao buscar Matchs", error.response.data.error);
+      setLoading(false);
+      //console.error("Erro ao buscar Matchs", error.response.data.error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -151,13 +158,14 @@ const Applications = () => {
       fetchAppliedVacancyData();
     }, [])
   );
-  if (!vacancyData) {
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color="#999" />
+          <Image source={logoSmall} style={styles.loadingLogo} />
+          <ActivityIndicator size="large" color="#0262A6" />
         </View>
       </View>
     );
